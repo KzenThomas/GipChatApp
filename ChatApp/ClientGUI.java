@@ -16,8 +16,18 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
-public class ClientGUI {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Component;
 
+@SpringBootApplication
+public class ClientGUI {
+	
+	@Autowired
+	MessageRepo messagerepo;
+	
+    String User = "Thomas";
 	ClientGUI mainGUI;
 	JFrame newFrame = new JFrame("AliExpress Whatsapp");
 	JButton sendMessage;
@@ -28,6 +38,7 @@ public class ClientGUI {
 
 	public static void main(String[] args) {
 		try {
+			SpringApplication.run(ClientGUI.class, args);
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -74,13 +85,13 @@ public class ClientGUI {
                 chatBox.setText("Cleared all messages\n");
                 messageBox.setText("");
             } else {
-                chatBox.append("<" + "Thomas" + ">:  " + messageBox.getText() + "\n");
+                chatBox.append("<" + User + ">:  " + messageBox.getText() + "\n");
+                messagerepo.addText(new Messages(messageBox.getText()));
                 messageBox.setText("");
             }
         }
     }
 
-    String username;
 
     class enterServerButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent event) {
