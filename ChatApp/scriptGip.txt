@@ -1,0 +1,12 @@
+create table Messages(
+   id integer primary key,
+   sender varchar(20) not null,
+   message varchar(255) not null,
+   messagedate DATETIME  not null
+);
+
+drop table Messages;
+
+
+
+

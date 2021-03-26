@@ -13,7 +13,7 @@ public interface MessageRepo extends CrudRepository<Messages, String>{
 	
 	@Query(value = "Select * from Messages", nativeQuery = true)
 	Iterable<Messages> getAllMessages();
+
 	
-	@Query("insert into Messages values (%1)")
-	void addText(Messages message);
+
 }	
