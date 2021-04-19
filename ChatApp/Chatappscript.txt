@@ -1,0 +1,24 @@
+create table conversations(
+   id integer primary key,
+   name varchar(255) not null,
+   cryptofile BLOB(255)not null
+);
+
+create table sender(
+   id integer primary key,
+   name varchar(255) not null
+);
+
+create table Messages(
+   id integer primary key,
+   sender varchar(20) not null,
+   text varchar(255) not null,
+   offset integer not null
+);
+
+MessageToConversation
+messageid
+conversationid
+
+drop table Messages;
+
