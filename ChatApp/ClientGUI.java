@@ -1,3 +1,4 @@
+  
 package ChatApp;
 
 import java.awt.BorderLayout;
@@ -45,11 +46,10 @@ public class ClientGUI extends JFrame implements ActionListener {
 	JButton sendMessage;
 	JTextField messageBox;
 	JTextArea chatBox;
+	JTextArea chatBoxx;
 	JTextField usernameChooser;
-	JFrame preFrame;
+	JFrame preFrame= new JFrame("decrypt");
 	LocalDateTime myDateObj = LocalDateTime.now();
-//	DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-//	String formattedDate = myDateObj.format(myFormatObj);
 	static JLabel l;
 	Container container = getContentPane();
 	JLabel userLabel = new JLabel("USERNAME");
@@ -102,66 +102,64 @@ public class ClientGUI extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-//		if (e.getSource() == loginButton) {
-//			String userText;
-//			String pwdText;
-//			userText = userTextField.getText();
-//			pwdText = passwordField.getText();
-//
-//		}
-//		if (e.getSource() == resetButton) {
-//			userTextField.setText("");
-//			passwordField.setText("");
-//		}
-//		if (e.getSource() == showPassword) {
-//			if (showPassword.isSelected()) {
-//				passwordField.setEchoChar((char) 0);
-//			} else {
-//				passwordField.setEchoChar('*');
-//			}
-//
-//		}
+		if (e.getSource() == loginButton) {
+			String userText;
+			String pwdText;
+			userText = userTextField.getText();
+			pwdText = passwordField.getText();
 
-			JButton button1 = new JButton("select a file to encrypt");
-			button1.addActionListener((event)->{
-				// if the user presses the save button show the save dialog
-				String com = event.getActionCommand();
+		}
+		if (e.getSource() == resetButton) {
+			userTextField.setText("");
+		passwordField.setText("");
+	}
+		if (e.getSource() == showPassword) {
+			if (showPassword.isSelected()) {
+				passwordField.setEchoChar((char) 0);
+			} else {
+				passwordField.setEchoChar('*');
+			}
 
-					// create an object of JFileChooser class
-					JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		}
 
-					// invoke the showsSaveDialog function to show the save dialog
-					int r = j.showOpenDialog(null);
-
-					// if the user selects a file
-					if (r == JFileChooser.APPROVE_OPTION){
-						// set the label to the path of the selected file
-						l.setText(j.getSelectedFile().getAbsolutePath());
-					}
-					// if the user cancelled the operation
-					else {
-						l.setText("the user cancelled the operation");
-					}
-			});
-			JPanel p = new JPanel();
-			p.add(button1);
-			l = new JLabel("no file selected");
-			p.add(l);
-			newFrame.add(p);
-			
 	}
 
 	public void display() {
-		
+		JButton Filebutton = new JButton("select a file to encrypt");
+		Filebutton.addActionListener((event) -> {
+			// if the user presses the save button show the save dialog
+			String com = event.getActionCommand();
+
+			// create an object of JFileChooser class
+			JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+			// invoke the showsSaveDialog function to show the save dialog
+			int r = j.showOpenDialog(null);
+
+			// if the user selects a file
+			if (r == JFileChooser.APPROVE_OPTION) {
+				// set the label to the path of the selected file
+				l.setText(j.getSelectedFile().getAbsolutePath());
+				encryptfile = j.getSelectedFile();
+			}
+			// if the user cancelled the operation
+			else {
+				l.setText("the user cancelled the operation");
+			}
+		});
+		JPanel southPanel = new JPanel();
+		southPanel.add(Filebutton);
+		l = new JLabel("no file selected");
+		southPanel.add(l);
+
 		ClientGUI frame = new ClientGUI();
 		frame.setTitle("Login Form");
 		frame.setVisible(true);
 		frame.setBounds(10, 10, 370, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
-
+		
 		newFrame.setVisible(true);
-		JPanel southPanel = new JPanel();
 		newFrame.add(BorderLayout.SOUTH, southPanel);
 		newFrame.setBounds(10, 10, 370, 600);
 		newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -191,7 +189,45 @@ public class ClientGUI extends JFrame implements ActionListener {
 		newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		newFrame.setSize(470, 300);
 	}
+	
 
+//	public void decrypt(){
+//		preFrame.setVisible(true);
+//		preFrame.setBounds(10, 10, 370, 600);
+//		preFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		preFrame.setSize(470, 300);
+//		preFrame.setResizable(false);
+//		JPanel p = new JPanel();
+//		JButton decryptbutton = new JButton("select this button to decrypt the message");
+//		decryptbutton.addActionListener((event) -> {
+//			// if the user presses the save button show the save dialog
+//			String com = event.getActionCommand();
+//			
+//			// create an object of JFileChooser class
+//			JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+//			
+//			// invoke the showsSaveDialog function to show the save dialog
+//			int r = j.showOpenDialog(null);
+//			
+//			// if the user selects a file
+//			if (r == JFileChooser.APPROVE_OPTION) {
+//				// set the label to the path of the selected file
+//				l.setText(j.getSelectedFile().getAbsolutePath());
+//				encryptfile = j.getSelectedFile();
+//			}
+//			// if the user cancelled the operation
+//			else {
+//				l.setText("the user cancelled the operation");
+//			}
+//		});
+//		chatBoxx = new JTextArea();
+//		chatBoxx.setEditable(false);
+//		p.add(decryptbutton);
+//		preFrame.add(p);
+//		preFrame.add(new JScrollPane(chatBoxx), BorderLayout.CENTER);
+//		chatBoxx.setLineWrap(true);
+//		chatBoxx.setFont(new Font("Serif", Font.PLAIN, 15));	
+//	} 
 	class sendMessageButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			if (messageBox.getText().length() < 1) {
@@ -209,10 +245,10 @@ public class ClientGUI extends JFrame implements ActionListener {
 				System.out.println("Decryptfile:" + encryptfile);
 				String decrypt = oneTimePad.decrypt(encryptfile, 0, encrypt);
 				System.out.println(decrypt);
+				chatBox.append(User + ":  " + encrypt);
+				chatBox.append(User + ":  " + decrypt);
 				messageBox.setText("");
 			}
 		}
 	}
-
-
 }
