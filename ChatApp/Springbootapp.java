@@ -1,6 +1,8 @@
 package ChatApp;
 
 import java.awt.EventQueue;
+import java.io.IOException;
+import java.net.ServerSocket;
 
 import javax.swing.UIManager;
 
@@ -14,7 +16,7 @@ public class Springbootapp {
 	public static void main(String[] args) {
 		try {
 			 var ctx = new SpringApplicationBuilder(ClientGUI.class)
-		                .headless(false).run(args);
+		     .headless(false).run(args);
 			EventQueue.invokeLater(() -> {
 
 	            var ex = ctx.getBean(ClientGUI.class);
@@ -27,4 +29,4 @@ public class Springbootapp {
 		
 	}
 
-}
+}       

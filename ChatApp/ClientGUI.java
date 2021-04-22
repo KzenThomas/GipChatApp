@@ -1,4 +1,4 @@
-  
+
 package ChatApp;
 
 import java.awt.BorderLayout;
@@ -11,8 +11,16 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -26,6 +34,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileSystemView;
+import java.io.File;
+import java.nio.file.Files;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -39,16 +49,21 @@ public class ClientGUI extends JFrame implements ActionListener {
 	OneTimePad oneTimePad;
 	@Autowired
 	MessageRepo messagerepo;
+	@Autowired
+	ConversationsRepo conversationsRepo;
+	@Autowired
+	SenderRepo SenderRepo;
 
 	String User = "Thomas";
 	ClientGUI mainGUI;
 	JFrame newFrame = new JFrame("ChatApp");
+	OneTimePad OTP = new OneTimePad();
 	JButton sendMessage;
 	JTextField messageBox;
 	JTextArea chatBox;
 	JTextArea chatBoxx;
 	JTextField usernameChooser;
-	JFrame preFrame= new JFrame("decrypt");
+	JFrame preFrame = new JFrame("decrypt");
 	LocalDateTime myDateObj = LocalDateTime.now();
 	static JLabel l;
 	Container container = getContentPane();
@@ -111,8 +126,8 @@ public class ClientGUI extends JFrame implements ActionListener {
 		}
 		if (e.getSource() == resetButton) {
 			userTextField.setText("");
-		passwordField.setText("");
-	}
+			passwordField.setText("");
+		}
 		if (e.getSource() == showPassword) {
 			if (showPassword.isSelected()) {
 				passwordField.setEchoChar((char) 0);
@@ -125,17 +140,24 @@ public class ClientGUI extends JFrame implements ActionListener {
 	}
 
 	public void display() {
+		ClientGUI frame = new ClientGUI();
+		frame.setTitle("Login Form");
+		frame.setVisible(true);
+		frame.setBounds(10, 10, 370, 600);
+		frame.setResizable(false);
+		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		dispose();
 		JButton Filebutton = new JButton("select a file to encrypt");
 		Filebutton.addActionListener((event) -> {
 			// if the user presses the save button show the save dialog
 			String com = event.getActionCommand();
-
+			
 			// create an object of JFileChooser class
 			JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-
+			
 			// invoke the showsSaveDialog function to show the save dialog
 			int r = j.showOpenDialog(null);
-
+			
 			// if the user selects a file
 			if (r == JFileChooser.APPROVE_OPTION) {
 				// set the label to the path of the selected file
@@ -150,25 +172,21 @@ public class ClientGUI extends JFrame implements ActionListener {
 		JPanel southPanel = new JPanel();
 		southPanel.add(Filebutton);
 		l = new JLabel("no file selected");
+		l.setSize(100, 30);
 		southPanel.add(l);
 
-		ClientGUI frame = new ClientGUI();
-		frame.setTitle("Login Form");
-		frame.setVisible(true);
-		frame.setBounds(10, 10, 370, 600);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
-		
 		newFrame.setVisible(true);
+		frame.setVisible(true);
 		newFrame.add(BorderLayout.SOUTH, southPanel);
-		newFrame.setBounds(10, 10, 370, 600);
-		newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		newFrame.setBounds(10, 10, 400, 600);
+		newFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		newFrame.setResizable(false);
 		southPanel.setBackground(Color.GRAY);
 		southPanel.setLayout(new GridBagLayout());
 
-		messageBox = new JTextField(30);
+		messageBox = new JTextField(33);
 		sendMessage = new JButton("Send Message");
+		sendMessage.setSize(100, 30);
 		chatBox = new JTextArea();
 		chatBox.setEditable(false);
 		newFrame.add(new JScrollPane(chatBox), BorderLayout.CENTER);
@@ -186,10 +204,8 @@ public class ClientGUI extends JFrame implements ActionListener {
 
 		chatBox.setFont(new Font("Serif", Font.PLAIN, 15));
 		sendMessage.addActionListener(new sendMessageButtonListener());
-		newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		newFrame.setSize(470, 300);
+		newFrame.setSize(600, 400);
 	}
-	
 
 //	public void decrypt(){
 //		preFrame.setVisible(true);
@@ -227,10 +243,15 @@ public class ClientGUI extends JFrame implements ActionListener {
 //		preFrame.add(new JScrollPane(chatBoxx), BorderLayout.CENTER);
 //		chatBoxx.setLineWrap(true);
 //		chatBoxx.setFont(new Font("Serif", Font.PLAIN, 15));	
-//	} 
+//	}
+
 	class sendMessageButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			if (messageBox.getText().length() < 1) {
+				Iterable<Messages> messagess = messagerepo.findAll();
+				for (Messages m : messagess) {
+					chatBox.append(m.getsender() + ":  " + m.getmessagetext());
+				}
 			} else if (messageBox.getText().equals(".clear")) {
 				chatBox.setText("Cleared all messages\n");
 				messageBox.setText("");
@@ -240,13 +261,15 @@ public class ClientGUI extends JFrame implements ActionListener {
 				System.out.println("Encryptfile:" + encryptfile);
 				String encrypt = oneTimePad.encrypt(encryptfile, 0, chatBox.getText());
 				System.out.println(encrypt);
-				Messages message = new Messages(encrypt, myDateObj);
+				Messages message = new Messages(encrypt, OTP.position, myDateObj);
 				messagerepo.save(message);
+   			    Conversations conversations = new Conversations("gesprek1");
+				conversationsRepo.save(conversations);
+				Sender sender = new Sender("Thomas");
+				SenderRepo.save(sender);
 				System.out.println("Decryptfile:" + encryptfile);
 				String decrypt = oneTimePad.decrypt(encryptfile, 0, encrypt);
 				System.out.println(decrypt);
-				chatBox.append(User + ":  " + encrypt);
-				chatBox.append(User + ":  " + decrypt);
 				messageBox.setText("");
 			}
 		}

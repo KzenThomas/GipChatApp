@@ -10,7 +10,6 @@ import javassist.bytecode.ByteArray;
 
 @Component
 public class OneTimePad {
-	ClientGUI cGUI = new ClientGUI();
 	static int position = 0;
 	
 	
@@ -33,7 +32,7 @@ public class OneTimePad {
 			byte[] readNbytes = bai.readNBytes(length);
 			String filestring = new String(readNbytes);
 			System.out.println("*****FILESTRING> " + filestring);
-			OneTimePad.position += position;
+			Integer positie = OneTimePad.position += position;
 			return filestring;
 		}catch (IOException e) {
 			e.printStackTrace();	

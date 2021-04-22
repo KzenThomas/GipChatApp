@@ -1,82 +1,70 @@
 package ChatApp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 @Entity(name = "Messages")
 	public class Messages {
 		
 		@Id
 		@GeneratedValue
-		@Column(name = "id")
-		private Integer id = 0;
+		@Column(name = "messageid")
+		private Integer messageid = 0;
 		
 		@Column(name = "sender")
 		private String sender;
 		
-		@Column(name = "message")
-		private String message;
+		@Column(name = "messagetext")
+		private String messagetext;
+		
+		@Column(name = "offset")
+		private Integer offset = 0;
 		
 		@Column(name = "messagedate")
 		private LocalDateTime messagedate;
 		
 
-		public Integer getid() {
-			return id;
+		public Integer getmessageid() {
+			return messageid;
 		}
 		
 		public String getsender() {
 			return sender;
 		}
 		
-		
-		
-		public String getmessage() {
-			return message;
+		public String getmessagetext() {
+			return messagetext;
 		}
 		
-		public void setid(Integer id) {
-			this.id = id;
+		public void setmessageid(Integer messageid) {
+			this.messageid = messageid;
+		}
+		public Integer getoffset() {
+			return offset;
+		}
+		
+		public void setoffset(Integer offset) {
+			this.offset = offset;
 		}
 		
 		public void setsender(String sender) {
 			this.sender = sender;
 		}
 		
-		public void setmessage(String message) {
-			this.message = message;
+		public void setmessagetext(String messagetext) {
+			this.messagetext = messagetext;
 		}
 		
-		
-		
-		public Integer getId() {
-			return id;
-		}
-
-		public void setId(Integer id) {
-			this.id = id;
-		}
-
-		public String getSender() {
-			return sender;
-		}
-
-		public void setSender(String sender) {
-			this.sender = sender;
-		}
-
-		public String getMessage() {
-			return message;
-		}
-
-		public void setMessage(String message) {
-			this.message = message;
-		}
-
 		public LocalDateTime getMessagedate() {
 			return messagedate;
 		}
@@ -84,14 +72,24 @@ import javax.persistence.Id;
 		public void setMessagedate(LocalDateTime messagedate) {
 			this.messagedate = messagedate;
 		}
+		
+		 @ManyToMany(cascade = { CascadeType.ALL })
+		    @JoinTable(
+		        name = "Messages Conversations", 
+		        joinColumns = { @JoinColumn(name = "Messageid") }, 
+		        inverseJoinColumns = { @JoinColumn(name = "Conversationsid") }
+		    )
+		    Set<Conversations> conversations = new HashSet<>();
+		   
 
 		public Messages() {
 			
 		}
 		
-		public Messages(String text, LocalDateTime formattedDate) {
-			this.message = text;
+		public Messages(String text, Integer positie , LocalDateTime formattedDate) {
+			this.messagetext = text;
 			this.sender = "thomas";
+			this.offset = positie;
 			this.messagedate = formattedDate;
 		}		
 	}

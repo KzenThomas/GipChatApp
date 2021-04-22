@@ -6,12 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import ChatApp.Messages;
+import ChatApp.Sender;
 
 @Repository
-public interface MessageRepo extends CrudRepository<Messages, String>{
+public interface SenderRepo extends CrudRepository<Sender, String>{
 	
-//	@Query(value = "Select messagetext from Messages", nativeQuery = true)
-//	Iterable<Messages> getAllMessages();
+	@Query(value = "Select * from Sender", nativeQuery = true)
+	Iterable<Sender> getAllSender();
 
 }	
