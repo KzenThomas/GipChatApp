@@ -9,17 +9,23 @@ import javax.swing.UIManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 
+import ChatApp.gui.ClientGUI;
+import ChatApp.gui.LoginGUI;
 
+@SpringBootApplication
+@ComponentScan("ChatApp")
 public class Springbootapp {
 	
 	public static void main(String[] args) {
 		try {
-			 var ctx = new SpringApplicationBuilder(ClientGUI.class)
+			 ConfigurableApplicationContext ctx = new SpringApplicationBuilder(Springbootapp.class)
 		     .headless(false).run(args);
 			EventQueue.invokeLater(() -> {
 
-	            var ex = ctx.getBean(ClientGUI.class);
+				LoginGUI ex = ctx.getBean(LoginGUI.class);
 	            ex.display();
 	        });
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
