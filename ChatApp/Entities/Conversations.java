@@ -33,18 +33,18 @@ public class Conversations {
 		return name;
 	}
 
-	public void setid(Integer conversationsid) {
+	public void setconversationsid(Integer conversationsid) {
 		this.conversationsid = conversationsid;
 	}
 
-	public void setsender(String name) {
+	public void setname(String name) {
 		this.name = name;
 	}
 	 @ManyToMany(cascade = { CascadeType.ALL })
 	    @JoinTable(
-	        name = "Messages Conversations", 
-	        joinColumns = { @JoinColumn(name = "Messageid") }, 
-	        inverseJoinColumns = { @JoinColumn(name = "Conversationsid") }
+	        name = "ConversationToMessage", 
+	        joinColumns = { @JoinColumn(name = "messageid") }, 
+	        inverseJoinColumns = { @JoinColumn(name = "conversationsid") }
 	    )
 	    Set<Conversations> conversations = new HashSet<>();
 

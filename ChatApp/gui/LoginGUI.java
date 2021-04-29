@@ -130,6 +130,5 @@ public class LoginGUI extends JFrame {
 		addComponentsToContainer();
 		addActionEvent();
 		this.setVisible(true);
-
 	}
 }
