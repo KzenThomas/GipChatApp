@@ -19,7 +19,6 @@ import ChatApp.Entities.Login;
 import ChatApp.repositories.ConversationsRepo;
 import ChatApp.repositories.LoginRepo;
 import ChatApp.repositories.MessageRepo;
-import ChatApp.repositories.SenderRepo;
 
 @Component
 public class LoginGUI extends JFrame {
@@ -29,8 +28,6 @@ public class LoginGUI extends JFrame {
 	MessageRepo messagerepo;
 	@Autowired
 	ConversationsRepo conversationsRepo;
-	@Autowired
-	SenderRepo SenderRepo;
 	@Autowired(required = true)
 	LoginRepo loginRepo;
 	@Autowired

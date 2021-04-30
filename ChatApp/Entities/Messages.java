@@ -25,8 +25,8 @@ public class Messages {
 		private Integer messageid = 0;
 		
 		@ManyToOne
-		@JoinColumn(name = "senderid")
-		private Sender sender;
+		@JoinColumn(name = "loginid")
+		private Login login;
 		
 		@Column(name = "messagetext")
 		private String messagetext;
@@ -65,12 +65,12 @@ public class Messages {
 			this.messageid = messageid;
 		}
 
-		public Sender getSender() {
-			return sender;
+		public Login getLogin() {
+			return login;
 		}
 
-		public void setSender(Sender sender) {
-			this.sender = sender;
+		public void setLogin(Login login) {
+			this.login = login;
 		}
 
 		public String getMessagetext() {
@@ -121,8 +121,8 @@ public class Messages {
 			
 		}
 			
-		public Messages(Sender sender, String text, Integer positie , LocalDateTime formattedDate) {
-			this.sender = sender;
+		public Messages(Login login, String text, Integer positie , LocalDateTime formattedDate) {
+			this.login = login;
 			this.messagetext = text;
 			this.offset = positie;
 			this.messagedate = formattedDate;
