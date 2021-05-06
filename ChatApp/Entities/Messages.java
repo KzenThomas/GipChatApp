@@ -18,113 +18,110 @@ import javax.persistence.OneToMany;
 
 @Entity(name = "Messages")
 public class Messages {
-		
-		@Id
-		@GeneratedValue
-		@Column(name = "messageid")
-		private Integer messageid = 0;
-		
-		@ManyToOne
-		@JoinColumn(name = "loginid")
-		private Login login;
-		
-		@Column(name = "messagetext")
-		private String messagetext;
-		
-		@Column(name = "offset")
-		private Integer offset = 0;
-		
-		@Column(name = "messagedate")
-		private LocalDateTime messagedate;
-		
 
-		public Integer getmessageid() {
-			return messageid;
-		}
-		
-		public String getmessagetext() {
-			return messagetext;
-		}
-		
-		public void setmessageid(Integer messageid) {
-			this.messageid = messageid;
-		}
-		public Integer getoffset() {
-			return offset;
-		}
-		
-		public void setoffset(Integer offset) {
-			this.offset = offset;
-		}
+	@Id
+	@GeneratedValue
+	@Column(name = "messageid")
+	private Integer messageid = 0;
 
-		public Integer getMessageid() {
-			return messageid;
-		}
+	@ManyToOne
+	@JoinColumn(name = "loginid")
+	private Login login;
 
-		public void setMessageid(Integer messageid) {
-			this.messageid = messageid;
-		}
+	@Column(name = "messagetext")
+	private String messagetext;
 
-		public Login getLogin() {
-			return login;
-		}
+	@Column(name = "offset")
+	private Integer offset = 0;
 
-		public void setLogin(Login login) {
-			this.login = login;
-		}
+	@Column(name = "messagedate")
+	private LocalDateTime messagedate;
 
-		public String getMessagetext() {
-			return messagetext;
-		}
-
-		public void setMessagetext(String messagetext) {
-			this.messagetext = messagetext;
-		}
-
-		public Integer getOffset() {
-			return offset;
-		}
-
-		public void setOffset(Integer offset) {
-			this.offset = offset;
-		}
-
-		public Set<Conversations> getConversations() {
-			return conversations;
-		}
-
-		public void setConversations(Set<Conversations> conversations) {
-			this.conversations = conversations;
-		}
-
-		public void setmessagetext(String messagetext) {
-			this.messagetext = messagetext;
-		}
-		
-		public LocalDateTime getMessagedate() {
-			return messagedate;
-		}
-
-		public void setMessagedate(LocalDateTime messagedate) {
-			this.messagedate = messagedate;
-		}
-		 
-		 @ManyToMany(cascade = { CascadeType.ALL })
-		    @JoinTable(
-		        name = "Messages Conversations", 
-		        joinColumns = { @JoinColumn(name = "messageid") }, 
-		        inverseJoinColumns = { @JoinColumn(name = "conversationsid") }
-		    )
-		    Set<Conversations> conversations = new HashSet<>();
-		 
-		public Messages() {
-			
-		}
-			
-		public Messages(Login login, String text, Integer positie , LocalDateTime formattedDate) {
-			this.login = login;
-			this.messagetext = text;
-			this.offset = positie;
-			this.messagedate = formattedDate;
-		}		
+	public Integer getmessageid() {
+		return messageid;
 	}
+
+	public String getmessagetext() {
+		return messagetext;
+	}
+
+	public void setmessageid(Integer messageid) {
+		this.messageid = messageid;
+	}
+
+	public Integer getoffset() {
+		return offset;
+	}
+
+	public void setoffset(Integer offset) {
+		this.offset = offset;
+	}
+
+	public Integer getMessageid() {
+		return messageid;
+	}
+
+	public void setMessageid(Integer messageid) {
+		this.messageid = messageid;
+	}
+
+	public Login getLogin() {
+		return login;
+	}
+
+	public void setLogin(Login login) {
+		this.login = login;
+	}
+
+	public String getMessagetext() {
+		return messagetext;
+	}
+
+	public void setMessagetext(String messagetext) {
+		this.messagetext = messagetext;
+	}
+
+	public Integer getOffset() {
+		return offset;
+	}
+
+	public void setOffset(Integer offset) {
+		this.offset = offset;
+	}
+
+	public Set<Conversations> getConversations() {
+		return conversations;
+	}
+
+	public void setConversations(Set<Conversations> conversations) {
+		this.conversations = conversations;
+	}
+
+	public void setmessagetext(String messagetext) {
+		this.messagetext = messagetext;
+	}
+
+	public LocalDateTime getMessagedate() {
+		return messagedate;
+	}
+
+	public void setMessagedate(LocalDateTime messagedate) {
+		this.messagedate = messagedate;
+	}
+
+	@ManyToMany(cascade = { CascadeType.ALL })
+	@JoinTable(name = "Messages Conversations", joinColumns = {
+			@JoinColumn(name = "messageid") }, inverseJoinColumns = { @JoinColumn(name = "conversationsid") })
+	Set<Conversations> conversations = new HashSet<>();
+
+	public Messages() {
+
+	}
+
+	public Messages(Login login, String text, Integer positie, LocalDateTime formattedDate) {
+		this.login = login;
+		this.messagetext = text;
+		this.offset = positie;
+		this.messagedate = formattedDate;
+	}
+}

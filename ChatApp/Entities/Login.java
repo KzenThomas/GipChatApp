@@ -26,26 +26,26 @@ public class Login {
 
 	@Column(name = "username")
 	private String username;
-	
+
 	@Column(name = "wachtwoord")
 	private String wachtwoord;
 
 	public Integer getloginid() {
 		return loginid;
 	}
-	
+
 	public Integer setloginid() {
 		return loginid;
 	}
-	
+
 	public String getusername() {
 		return username;
 	}
-	
+
 	public String setusername() {
 		return username;
 	}
-	
+
 	public String getwachtwoord() {
 		return wachtwoord;
 	}
@@ -54,29 +54,22 @@ public class Login {
 		return wachtwoord;
 	}
 
-	public Login( String userText , String pwdText) {
-		this.username = userText;
-		this.wachtwoord = pwdText;
-	}
-	
-	public Login( String userText) {
-		this.username = userText;
-	}
-	
 	public Login() {
-		
+
 	}
-	
-	 @ManyToMany(cascade = { CascadeType.ALL })
-	    @JoinTable(
-	        name = "conversationstologin", 
-	        joinColumns = { @JoinColumn(name = "conversationsid") }, 
-	        inverseJoinColumns = { @JoinColumn(name = "loginid") }
-	    )
-	    Set<Conversations> conversations = new HashSet<>();
-	
+
 	@Override
 	public String toString() {
-		return this.username; 
+		return this.username;
 	}
+
+	public Login(String username, String wachtwoord) {
+		this.username = username;
+		this.wachtwoord = wachtwoord;
+	}
+
+	@ManyToMany(cascade = { CascadeType.ALL })
+	@JoinTable(name = "conversationstologin", joinColumns = {
+			@JoinColumn(name = "conversationsid") }, inverseJoinColumns = { @JoinColumn(name = "loginid") })
+	Set<Conversations> conversations = new HashSet<>();
 }

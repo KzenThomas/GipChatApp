@@ -12,7 +12,7 @@ import ChatApp.Entities.Messages;
 @Repository
 public interface MessageRepo extends CrudRepository<Messages, String>{
 	
-//	@Query(value = "Select messagetext from Messages", nativeQuery = true)
-//	Iterable<Messages> getAllMessages();
+	@Query(value = "Select messagetext from Messages", nativeQuery = true)
+	Iterable<Messages> getAllMessages();
 
 }	

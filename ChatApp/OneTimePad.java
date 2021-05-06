@@ -4,44 +4,47 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.Scanner;
 
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 
 import javassist.bytecode.ByteArray;
 
 @Component
 public class OneTimePad {
-	static int position = 0;
-	
-	
+	public static int position = 0;
+
 	public String encrypt(File f, int position, String text) {
 		String key = FileToString(f, position, text.length());
 		String encrypted = stringEncryption(text.toUpperCase(), key.toUpperCase());
 		return encrypted;
 	}
-	
+
 	public String decrypt(File f, int position, String text) {
 		String key = FileToString(f, position, text.length());
 		String decrypted = stringDecryption(text.toUpperCase(), key.toUpperCase());
 		return decrypted;
 	}
-	
-	public static String FileToString (File f ,int position, int length) {
+
+	public static String FileToString(File f, int position, int length) {
 		try {
 			ByteArrayInputStream bai = new ByteArrayInputStream(Files.readAllBytes(f.toPath()));
 			bai.skip(position);
 			byte[] readNbytes = bai.readNBytes(length);
 			String filestring = new String(readNbytes);
-			System.out.println("*****FILESTRING> " + filestring);
 			Integer positie = OneTimePad.position += position;
 			return filestring;
-		}catch (IOException e) {
-			e.printStackTrace();	
-			
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return "Error";
-		
-		
 	}
+
+	/**
+	 * Deze method zorgt ervoor dat de plain text wordt geëncrypteerd naar
+	 * geëncrypteerde tekst.
+	 * 
+	 * @param text,key
+	 */
 
 	// function which returns encryptedText
 	public static String stringEncryption(String text, String key) {
@@ -78,6 +81,13 @@ public class OneTimePad {
 		// returning the cipherText
 		return cipherText;
 	}
+
+	/**
+	 * Deze method zorgt ervoor dat je de geëncrypteerde tekst kan decrypteren naar
+	 * plain text.
+	 * 
+	 * @param s,key
+	 */
 
 	// function which returns plainText
 	public static String stringDecryption(String s, String key) {

@@ -40,30 +40,23 @@ public class Conversations {
 	public void setname(String name) {
 		this.name = name;
 	}
-	
-	 @ManyToMany(cascade = { CascadeType.ALL })
-	    @JoinTable(
-	        name = "messagestoconversations", 
-	        joinColumns = { @JoinColumn(name = "messageid") }, 
-	        inverseJoinColumns = { @JoinColumn(name = "conversationsid") }
-	    )
-	    Set<Messages> messages = new HashSet<>();
-	 
-	 @ManyToMany(cascade = { CascadeType.ALL })
-	    @JoinTable(
-	        name = "conversationstologin", 
-	        joinColumns = { @JoinColumn(name = "loginid") },
-	        inverseJoinColumns = { @JoinColumn(name = "conversationsid") } 
-	    )
-	    Set<Login> logins = new HashSet<>();
-	 
+
+	@ManyToMany(cascade = { CascadeType.ALL })
+	@JoinTable(name = "messagestoconversations", joinColumns = {
+			@JoinColumn(name = "messageid") }, inverseJoinColumns = { @JoinColumn(name = "conversationsid") })
+	Set<Messages> messages = new HashSet<>();
+
+	@ManyToMany(cascade = { CascadeType.ALL })
+	@JoinTable(name = "conversationstologin", joinColumns = { @JoinColumn(name = "loginid") }, inverseJoinColumns = {
+			@JoinColumn(name = "conversationsid") })
+	Set<Login> logins = new HashSet<>();
+
 	public Conversations(String gespreksnaam) {
 		this.name = "gesprek1";
-
 	}
-	
+
 	public Conversations() {
-		
+
 	}
 
 	public Set<Messages> getMessages() {
@@ -81,7 +74,7 @@ public class Conversations {
 	public void setLogins(Set<Login> logins) {
 		this.logins = logins;
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.getname();

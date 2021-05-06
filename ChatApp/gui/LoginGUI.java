@@ -33,7 +33,8 @@ public class LoginGUI extends JFrame {
 	@Autowired
 	ClientGUI clientgui;
 
-	public String userText;
+	public String username;
+	public String wachtwoord;
 	Container container = getContentPane();
 	JLabel userLabel = new JLabel("USERNAME");
 	JLabel passwordLabel = new JLabel("PASSWORD");
@@ -72,9 +73,10 @@ public class LoginGUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == loginButton) {
-					userText = userTextField.getText();
-					String pwdText = passwordField.getText();
-					Login login = new Login(userText, pwdText);
+					username = userTextField.getText();
+					System.out.println("USERNAME: " + username);
+					wachtwoord = passwordField.getText();
+					Login login = new Login(username, wachtwoord);
 					saveLogintoDB(login);
 					dispose();
 					clientgui.display();

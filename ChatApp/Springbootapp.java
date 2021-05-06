@@ -1,6 +1,7 @@
 package ChatApp;
 
 import java.awt.EventQueue;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 
@@ -15,24 +16,30 @@ import org.springframework.context.annotation.ComponentScan;
 import ChatApp.gui.ClientGUI;
 import ChatApp.gui.LoginGUI;
 
+/**
+ * @author Thomas
+ */
+
 @SpringBootApplication
 @ComponentScan("ChatApp")
 public class Springbootapp {
-	
+
+	/**
+	 * Deze main method zorgt ervoor dat je de applicatie kan opstarten.
+	 */
+
 	public static void main(String[] args) {
 		try {
-			 ConfigurableApplicationContext ctx = new SpringApplicationBuilder(Springbootapp.class)
-		     .headless(false).run(args);
+			ConfigurableApplicationContext ctx = new SpringApplicationBuilder(Springbootapp.class).headless(false)
+					.run(args);
 			EventQueue.invokeLater(() -> {
 
 				LoginGUI ex = ctx.getBean(LoginGUI.class);
-	            ex.display();
-	        });
+				ex.display();
+			});
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e) {
+		} catch (Exception e) { 
 			e.printStackTrace();
 		}
-		
 	}
-
-}       
+}

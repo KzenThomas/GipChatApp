@@ -38,6 +38,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -78,12 +79,14 @@ public class ClientGUI extends JFrame {
 	JButton NewConversation;
 	JTextField messageBox;
 	JTextArea chatBox;
-	JTextArea chatBoxx;
+	JTextArea NewChatBox;
 	JTextField usernameChooser;
 	LocalDateTime myDateObj = LocalDateTime.now();
 	static JLabel l;
 	File encryptfile;
 	ListSelectionModel listSelectionModel;
+	Login login = new Login();
+	String Conversationsname;
 
 	public void display() {
 		JButton Filebutton = new JButton("select a file to encrypt");
@@ -130,27 +133,9 @@ public class ClientGUI extends JFrame {
 			public void valueChanged(ListSelectionEvent listSelectionEvent) {
 				boolean adjust = listSelectionEvent.getValueIsAdjusting();
 				if (!adjust) {
-//					JList list = (JList) listSelectionEvent.getSource();
-//					int selections[] = list.getSelectedIndices();
-					
-//					int selected = selections[0];
 					int index = list.getSelectedIndex();
 					Conversations selected = list.getSelectedValue();
-					System.out.println("GEselecteeerde chat: " + selected.getname());
-					
-//					Object selectionValues[] = list.getSelectedValues();
-//					for (int i = 0, n = selections.length; i < n; i++) {
-//						if (i == 0) {
-//						}
-//						System.out.println(" Selections: ");
-//						chatBoxx = new JTextArea();
-//						chatBoxx.setEditable(false);
-//						chatBoxx.setVisible(true);
-//						chatBoxx.setLineWrap(true);
-//						chatBoxx.setFont(new Font("Serif", Font.PLAIN, 15));
-//						chatBoxx.append("test");
-//						System.out.println(selections[i] + "/" + selectionValues[i] + " ");
-//					}
+					System.out.println("Geselecteeerde chat: " + selected.getname());
 				}
 			}
 		};
@@ -170,6 +155,7 @@ public class ClientGUI extends JFrame {
 		JPanel panell = new JPanel();
 		panell.add(NewConversation);
 		this.getContentPane().add(panell, BorderLayout.NORTH);
+		NewConversation.addActionListener(new StartNewConversation());
 
 		messageBox = new JTextField(32);
 		sendMessage = new JButton("Send Message");
@@ -188,16 +174,38 @@ public class ClientGUI extends JFrame {
 		southPanel.add(messageBox, left);
 		southPanel.add(sendMessage, right);
 
-		Iterable<Messages> messagess = messagerepo.findAll();
-		for (Messages m : messagess) {
-			chatBox.append("Thomas" + ":  " + m.getmessagetext() + "\n");
-			messagess.spliterator();
-			}
-
 		chatBox.setFont(new Font("Serif", Font.PLAIN, 15));
 		sendMessage.addActionListener(new sendMessageButtonListener());
 		this.setSize(600, 400);
+		showdecryptedtext();
 	}
+
+	public void showdecryptedtext() {
+		int delay = 1000;
+		ActionListener taskPerformer = new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				if (encryptfile == null) {
+					return;
+				} else {
+					Iterable<Messages> messagess = messagerepo.findAll();
+					chatBox.setText("");
+					for (Messages m : messagess) {
+						String getmessagetext = m.getmessagetext();
+						String decrypt = oneTimePad.decrypt(encryptfile, m.getoffset(), getmessagetext);
+						chatBox.append(m.getLogin().getusername() + ":  " + decrypt + "\n");
+						messagess.spliterator();
+					}
+				}
+			}
+
+		};
+		new Timer(delay, taskPerformer).start();
+	}
+
+	/**
+	 * Deze button zorgt ervoor dat je een bericht kan versturen in de gui en dat de
+	 * data daarvan wordt opgeslagen in de database.
+	 */
 
 	class sendMessageButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
@@ -206,21 +214,29 @@ public class ClientGUI extends JFrame {
 				chatBox.setText("Cleared all messages\n");
 				messageBox.setText("");
 			} else {
-				chatBox.append(logingui.userText + ":  " + messageBox.getText() + "\n");
+//				chatBox.append(logingui.username + ":  " + messageBox.getText() + "\n");
+				System.out.println("Username: " + logingui.username);
 				System.out.println("***************************");
 				System.out.println("Encryptfile:" + encryptfile);
 				String encrypt = oneTimePad.encrypt(encryptfile, 0, messageBox.getText());
 				System.out.println(encrypt);
-				Login login = new Login("thomas");
-				Messages message = new Messages(login, encrypt, oneTimePad.position, myDateObj);
+				Login login = new Login(logingui.username, logingui.wachtwoord);
+				Login savedlogin = loginrepo.save(login);
+				Messages message = new Messages(savedlogin, encrypt, oneTimePad.position, myDateObj);
+				// conversation.addmessage(message);
+				// conversationrepo.save(conversation);
 				messagerepo.save(message);
-				Conversations conversations = new Conversations("gesprek1");
-				conversationsRepo.save(conversations);
 				System.out.println("Decryptfile:" + encryptfile);
-				String decrypt = oneTimePad.decrypt(encryptfile, 0, encrypt);
-				System.out.println(decrypt);
+//				String decrypt = oneTimePad.decrypt(encryptfile, 0, encrypt);
+//				System.out.println(decrypt);
 				messageBox.setText("");
 			}
+		}
+	}
+
+	class StartNewConversation implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			chatBox.setText("");
 		}
 	}
 }
