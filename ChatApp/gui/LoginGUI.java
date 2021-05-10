@@ -74,23 +74,11 @@ public class LoginGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == loginButton) {
 					username = userTextField.getText();
-					System.out.println("USERNAME: " + username);
 					wachtwoord = passwordField.getText();
 					Login login = new Login(username, wachtwoord);
 					saveLogintoDB(login);
 					dispose();
 					clientgui.display();
-				}
-				if (e.getSource() == resetButton) {
-					userTextField.setText("");
-					passwordField.setText("");
-				}
-				if (e.getSource() == showPassword) {
-					if (showPassword.isSelected()) {
-						passwordField.setEchoChar((char) 0);
-					} else {
-						passwordField.setEchoChar('*');
-					}
 				}
 			}
 		});
